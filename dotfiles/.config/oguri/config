@@ -1,0 +1,7 @@
+[output eDP-1]
+#image=$XDG_CONFIG_HOME/Pictures/WP
+image=~/Downloads/wp2757868-wallpaper-gif.gif
+filter=nearest
+scaling-mode=fill
+anchor=center
+
