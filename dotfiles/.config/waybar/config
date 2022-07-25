@@ -1,13 +1,13 @@
 {
-    // "layer": "top", // Waybar at top layer
-    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
     "height": 13, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width  
-    "spacing": 7, // Gaps between modules (4px)
+    "spacing": 5, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["cpu", "temperature", "memory", "custom/disk_root", "custom/disk_home", "custom/disk_swap"],
-    "modules-right": ["custom/pacman", "backlight", "pulseaudio", "keyboard-state", "sway/language", "network#vpn", "battery", "clock", "tray"],
+    "modules-center": [],
+    "modules-right": ["custom/pacman", "custom/disk_status", "cpu", "temperature", "custom/memory", "backlight", "pulseaudio", "network#vpn", "sway/language", "battery", "clock", "custom/separate_line", "tray"],
     // Modules configuration
     // "sway/workspaces": {
     //     "disable-scroll": true,
@@ -24,6 +24,13 @@
     //         "default": ""
     //     }
     // },
+    "custom/disk_status": {
+        "format": "Disk",
+        "on-click": "~/.config/scripts/hardware/hardware.sh",
+    },
+    "custom/separate_line": {
+        "format": "|"
+    },
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -76,7 +83,7 @@
     },
     "tray": {
         "icon-size": 16,
-        "spacing": 10,
+        "spacing": 8,
         "show-passive-items": true
     },
     "clock": {
@@ -98,12 +105,18 @@
         "interval": 1,
         "format": "Mem: {used:0.1f}G/{total:0.1f}G",
     },
+    "custom/memory": {
+        // "format": "Mem: {}%  "
+        "interval": 1,
+        /* "format": "Mem: {used:0.1f}G/{total:0.1f}G", */
+        "exec": "~/.config/scripts/other_scripts/cust_mem.sh"
+    },
     "custom/pacman": {
         "format": "{}  ",
         "interval": 3600, // every hour
         "exec": "checkupdates | wc -l", // # of updates
         "exec-if": "exit 0", // always run; consider advanced run conditions
-        "on-click": "kitty -e sudo pacman -Syyu ; pkill -SIGRTMIN+8 waybar", // update system
+        "on-click": "kitty -e paru -Syyu --noconfirm ; pkill -SIGRTMIN+8 waybar", // update system
         "signal": 8
     },
     "custom/speedtest": {
@@ -111,17 +124,35 @@
         "interval": 1,
         "exec": "~/.config/polybar/scripts/speedtest-polybar-module/speedtest_api.py"
     },
+	"custom/disk": {
+		"format": "Disk {}",
+		/* "interval": 1, */
+        "exec": "~/.config/scripts/disk/disk_home.sh",
+    },
+    "group/disk": {
+        "modules": [
+            "custom/disk_home",
+            "custom/disk_root",
+            "custom/disk_swap"
+        ]
+    },
 	"custom/disk_home": {
 		"format": "HD: {} ",
 		"interval": 1,
 		/* "exec": "df -h --output=used $HOME | tail -1 | tr -d ' ' " */
-		"exec": "~/.config/Scripts/disk_home.sh"
+		"exec": "~/.config/scripts/disk/disk_home.sh"
     },
 	"custom/disk_root": {
 		"format": "RD: {} ",
 		"interval": 1,
 		/* "exec": "df -h --output=used / | tail -1 | tr -d ' '" */
-		"exec": "~/.config/Scripts/disk_root.sh"
+		"exec": "~/.config/scripts/disk/disk_root.sh"
+	},
+	"custom/disk_swap": {
+		"format": "Swap: {} ",
+		"interval": 1,
+		/* "exec": "df -h --output=used / | tail -1 | tr -d ' '" */
+		"exec": "~/.config/scripts/disk/disk_swap.sh"
 	},
     "temperature": {
         "thermal-zone": 2,
@@ -129,8 +160,8 @@
         "critical-threshold": 80,
         "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""],
-        "interval": 1
+        "format-icons": [""],
+        "interval": 1,
     },
     "network#vpn": {
         "interface": "proton0",
@@ -138,8 +169,8 @@
         "format": "VPN: on",
         /* "format-disconnected": "⚠  Disconnected", */
         "format-disconnected": "VPN: off",
-        "on-click": "protonvpn-cli c -f --protocol udp",
-        "on-click-right": "protonvpn-cli d",
+        /* "on-click": "protonvpn-cli c -f --protocol udp", */
+        /* "on-click-right": "protonvpn-cli d", */
         "tooltip-format": "{ifname}: {ipaddr}/{cidr}",          
     },
     "backlight": {
@@ -166,14 +197,14 @@
         "bat": "BAT2"
     },
     "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "interface": "wlp1s0", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
+        /* "tooltip-format": "{ifname} via {gwaddr} ", */
+        "tooltip-format": "{network#vpn}",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
-
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
