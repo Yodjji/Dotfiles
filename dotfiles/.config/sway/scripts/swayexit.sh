@@ -1,13 +1,10 @@
 #!/bin/sh
 
 lock() {
-    swaylock -e -f -c 000000 -i ~/Pictures/WP/13.jpg -t
+    swaylock -e -f -c 000000 -i ~/Pictures/WP/3.jpg -t
 }
 
 case "$1" in
-    lockOff)
-        swaymsg output eDP-1 disable | systemctl suspend
-        ;;
     lock)
         lock
         ;;

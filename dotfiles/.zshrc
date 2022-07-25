@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -6,6 +13,7 @@
 #export ZSH="/home/$USER/.oh-my-zsh"
 #installation via paru -S oh-my-zsh-git
 export ZSH=/usr/share/oh-my-zsh/
+# source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -14,6 +22,7 @@ export ZSH=/usr/share/oh-my-zsh/
 # if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
 ZSH_THEME="candy"
 # ZSH_THEME="gentoo"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -76,7 +85,7 @@ ZSH_THEME="candy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git golang python docker)
+plugins=(git golang python docker sudo web-search colored-man-pages)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -115,8 +124,8 @@ export HISTCONTROL=ignoreboth:erasedups
 
 # Make nano the default editor
 
-export EDITOR='lvim'
-export VISUAL='lvim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 #PS1='[\u@\h \W]\$ '
 
@@ -137,7 +146,8 @@ fi
 #list
 alias ls='ls --color=auto'
 alias la='ls -a'
-alias ll='ls -la'
+alias ll='ls -l'
+alias lla='ls -la'
 alias l='ls'
 alias l.="ls -A | egrep '^\.'"
 
@@ -157,7 +167,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
 #readable output
-alias df='df -h'
+# alias df='df -h'
 
 #pacman unlock
 alias unlock="sudo rm /var/lib/pacman/db.lck"
@@ -185,14 +195,18 @@ alias merge="xrdb -merge ~/.Xresources"
 # pacman or pm
 alias pacman='sudo pacman --color auto'
 alias up='sudo pacman -Syyu'
-alias fuck='sudo !!'
+alias pup='paru -Syyu --noconfirm'
 alias install="sudo pacman -S"
+alias pinstall="paru -S --noconfirm"
 alias remove="sudo pacman -Rs"
+alias premove="paru -Rs"
 alias search="sudo pacman -Ss"
+alias psearch="paru -Ss"
 alias cl="clear"
-alias swconf='lvim .config/sway/config'
+alias swconf='nvim .config/sway/config'
 alias ven="source ./venv/bin/activate"
 alias lv="lvim"
+alias nv="nvim"
 alias v="vim"
 
 #poetry
@@ -202,14 +216,19 @@ alias pnew="poetry new"
 
 # Docker
 alias doc="docker"
-alias doc_run="docker run"
-alias doc_im="docker images"
-alias doc_ps="docker ps"
-alias doc_psa="docker ps -a"
-alias doc_stop="docker stop $(docker ps -aq)"
-alias doc_start="docker start"
-alias doc_e="docker exec -it"
-alias doc_kill="docker rm"
+alias drun="docker run"
+alias dim="docker images"
+alias dps="docker ps"
+alias dpsa="docker ps -a"
+alias dstop='docker stop $(docker ps -a -q)'
+alias dstart="docker start"
+alias de="docker exec -it"
+alias dkill="docker rm"
+alias dcu="docker-compose up -d"
+alias dcd="docker-compose down"
+alias dimg="docker images"
+alias dimgq="docker images -q"
+alias drmia='docker rmi $(docker images -aq)'
 
 # paru as aur helper - updates everything
 alias pksyua="paru -Syu --noconfirm"
@@ -433,3 +452,6 @@ alias personal='cp -Rf /personal/* ~'
 #sysinfo-retro
 #cpufetch
 #colorscript random
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
