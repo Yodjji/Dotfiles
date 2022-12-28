@@ -42,11 +42,12 @@ fix_func()
 
 main()
 {
-    read -p "Actions with bluetooth: connect (c), disconnect (d) or fix problem (f)? "  x
+  read -p "Actions with bluetooth: connect (c), disconnect (d), fix problem (f) or fix problem and connect(fc)? "  x
 case $x in
     "c") connect_func ;;
     "d") disconnect_func ;;
     "f") fix_func ;;
+    "fc") fix_func && connect_func ;;
       *) echo "Not responde"
 esac
 }

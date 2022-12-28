@@ -2,6 +2,8 @@
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: Roboto, Helvetica, Arial, sans-serif;
     font-size: 13px;
+    color: #fff;
+    margin: 0 2px 0 1px;
 }
 
 window#waybar {
@@ -9,7 +11,6 @@ window#waybar {
     background-color: #2e2e2e;
     /* background-color: #3c3c3c; */
     /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
-    color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
     /* border-radius: 20px; */
@@ -24,7 +25,7 @@ window#waybar.empty {
     background-color: transparent;
 }
 window#waybar.solo {
-    background-color: #FFFFFF;
+    /* background-color: #FFFFFF; */
 }
 
 window#waybar.termite {
@@ -68,7 +69,6 @@ window#waybar.chromium {
 }
 
 #clock,
-#battery,
 #cpu,
 #memory,
 #custom-memory,
@@ -78,18 +78,19 @@ window#waybar.chromium {
 #network,
 #pulseaudio,
 #custom-media,
+#custom-pacman,
 #tray,
 #mode,
 #idle_inhibitor,
 #custom-disk_home,
+#custom-disk_status,
 #custom-disk_root,
 #custom-disk_swap,
 #custom-speedtest,
 #language,
 #mpd {
-    padding-right: 5px;
-    color: #fff;
-    border-radius: 10px;
+    padding-right: 3px;
+    border-radius: 7px;
 }
 
 #window,
@@ -99,19 +100,15 @@ window#waybar.chromium {
 
 /* If workspaces is the leftmost module, omit left margin */
 .modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
+    margin-left: 2px;
 }
 
 /* If workspaces is the rightmost module, omit right margin */
 .modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
-}
-
-#clock {
+    margin-right: 2px;
 }
 
 #battery {
-    color: #fff;
 }
 
 #battery.charging, #battery.plugged {
@@ -140,18 +137,6 @@ label:focus {
     background-color: #000000;
 }
 
-#custom-pacman {
-    color: #fff;
-}
-
-#custom-disk_home, #custom-disk_root, #custom-disk_swap {
-    background-color: #172c8b;
-}
-
-#custom-speedtest {
-    /* background-color: #25b91d; */
-}
-
 #cpu {
     /* background-color: #2ecc71; */
     color: #fff;
@@ -163,10 +148,6 @@ label:focus {
 
 #custom-memory {
     /* background-color: #9b59b6; */
-}
-
-#disk {
-    background-color: #964B00;
 }
 
 #backlight {
@@ -259,8 +240,8 @@ label:focus {
 #language {
     /* background: #00b093; */
     color: #fff;
-    padding: 0 5px;
-    margin: 0 5px;
+    padding: 0 2px;
+    margin: 0 2px;
     min-width: 16px;
 }
 
@@ -268,12 +249,12 @@ label:focus {
     /* background: #97e1ad; */
     color: #fff;
     padding: 0 0px;
-    margin: 0 5px;
-    min-width: 16px;
+    margin: 0 2px;
+    min-width: 20px;
 }
 
 #keyboard-state > label {
-    padding: 0 5px;
+    padding: 0 2px;
 }
 
 #keyboard-state > label.locked {

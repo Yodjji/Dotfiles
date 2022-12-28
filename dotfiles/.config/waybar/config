@@ -1,16 +1,18 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 13, // Waybar height (to be removed for auto height)
+    "id": 1,
+    "height": 15, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width  
-    "spacing": 5, // Gaps between modules (4px)
+    "spacing": 0, // Gaps between modules (4px)
+    "hidden_state": "hide 1",
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": [],
-    "modules-right": ["custom/pacman", "custom/disk_status", "cpu", "temperature", "custom/memory", "backlight", "pulseaudio", "network#vpn", "sway/language", "battery", "clock", "custom/separate_line", "tray"],
+    "modules-center": ["custom/pacman", "custom/separate_line", "custom/disk_status", "custom/separate_line", "cpu", "temperature", "custom/separate_line", "custom/memory"],
+    "modules-right": ["backlight", "custom/separate_line", "pulseaudio", "custom/separate_line", "network#vpn", "custom/separate_line", "sway/language", "keyboard-state", "custom/separate_line", "custom/battery", "custom/separate_line", "clock", "custom/separate_line", "tray"],
     // Modules configuration
     // "sway/workspaces": {
-    //     "disable-scroll": true,
+    //     "disable-scroll": false,
     //     "all-outputs": true,
     //     "format": "{name}: {icon}",
     //     "format-icons": {
@@ -32,9 +34,9 @@
         "format": "|"
     },
     "keyboard-state": {
-        "numlock": true,
+        "numlock": false,
         "capslock": true,
-        "format": "{name} {icon}",
+        "format": "{name}",
         "format-icons": {
             "locked": "",
             "unlocked": ""
@@ -92,7 +94,7 @@
         "format": " {:%H:%M:%S}",
         "tooltip-format": "<big>{:%d-%m-%Y}</big>\n<tt><small>{calendar}</small></tt>",
         // "format-alt": "{:%Y-%m-%d}",
-        // "on-click": "<tt><small>{calendar}</small></tt>"
+        "on-click": "kitty -e calcure"
     },
     "cpu": {
         // "format": "CPU: {usage}% ",
@@ -116,7 +118,7 @@
         "interval": 3600, // every hour
         "exec": "checkupdates | wc -l", // # of updates
         "exec-if": "exit 0", // always run; consider advanced run conditions
-        "on-click": "kitty -e paru -Syyu --noconfirm ; pkill -SIGRTMIN+8 waybar", // update system
+        "on-click": "kitty -e paru -Syyu; pkill -SIGRTMIN+8 waybar", // update system
         "signal": 8
     },
     "custom/speedtest": {
@@ -124,36 +126,6 @@
         "interval": 1,
         "exec": "~/.config/polybar/scripts/speedtest-polybar-module/speedtest_api.py"
     },
-	"custom/disk": {
-		"format": "Disk {}",
-		/* "interval": 1, */
-        "exec": "~/.config/scripts/disk/disk_home.sh",
-    },
-    "group/disk": {
-        "modules": [
-            "custom/disk_home",
-            "custom/disk_root",
-            "custom/disk_swap"
-        ]
-    },
-	"custom/disk_home": {
-		"format": "HD: {} ",
-		"interval": 1,
-		/* "exec": "df -h --output=used $HOME | tail -1 | tr -d ' ' " */
-		"exec": "~/.config/scripts/disk/disk_home.sh"
-    },
-	"custom/disk_root": {
-		"format": "RD: {} ",
-		"interval": 1,
-		/* "exec": "df -h --output=used / | tail -1 | tr -d ' '" */
-		"exec": "~/.config/scripts/disk/disk_root.sh"
-	},
-	"custom/disk_swap": {
-		"format": "Swap: {} ",
-		"interval": 1,
-		/* "exec": "df -h --output=used / | tail -1 | tr -d ' '" */
-		"exec": "~/.config/scripts/disk/disk_swap.sh"
-	},
     "temperature": {
         "thermal-zone": 2,
         "hwmon-path": "/sys/class/hwmon/hwmon4/temp2_input",
@@ -181,20 +153,34 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 95,
             "warning": 20,
             "critical": 10
         },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
+        "exec": "~/.config/scripts/hardware/bat_procent.sh",
+        "format": "{}% {icon}",
+        "format-charging": "{}% ",
+        "format-plugged": "{}% ",
         "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
+         //"format-good": "", // An empty format will hide the module
+         //"format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
-    "battery#bat2": {
-        "bat": "BAT2"
+    "custom/battery": {
+        "states": {
+            "good": 95,
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{}",
+        "exec": "~/.config/scripts/hardware/bat_procent.sh",
+        "interval": 1,
+        "format-charging": "{} ",
+        "format-plugged": "{} ",
+        "format-alt": "{time} {icon}",
+        /* // "format-good": "", // An empty format will hide the module */
+        /* // "format-full": "", */
+        /* "format-icons": ["", "", "", "", ""] */
     },
     "network": {
         "interface": "wlp1s0", // (Optional) To force the use of this interface

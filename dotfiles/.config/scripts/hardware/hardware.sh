@@ -12,8 +12,8 @@ cust_memory(){
 
 
 home_disk_usage(){
-    home_used=`df -BM --output=used /dev/nvme0n1p{8..10} | tail -1 | tr -d 'M'`
-    home_size=`df -BM --output=size /dev/nvme0n1p{8..10} | tail -1 | tr -d 'M'`
+    home_used=`df -BM --output=used /dev/nvme0n1p7 | tail -1 | tr -d 'M'`
+    home_size=`df -BM --output=size /dev/nvme0n1p7 | tail -1 | tr -d 'M'`
     bytes_size=1024
 
     size=`echo "scale=1 ; $home_size / $bytes_size" | bc`
@@ -24,8 +24,8 @@ home_disk_usage(){
 
 
 root_disk_usage(){
-    root_used=`df -BM --output=used /dev/nvme0n1p9 | tail -1 | tr -d 'M'`
-    root_size=`df -BM --output=size /dev/nvme0n1p9 | tail -1 | tr -d 'M'`
+    root_used=`df -BM --output=used /dev/nvme0n1p6 | tail -1 | tr -d 'M'`
+    root_size=`df -BM --output=size /dev/nvme0n1p6 | tail -1 | tr -d 'M'`
     bytes_size=1024
 
     size=`echo "scale=1 ; $root_size / $bytes_size" | bc`
@@ -36,8 +36,8 @@ root_disk_usage(){
 
 
 swap_disk_usage(){
-    swap_used=`df -BM --output=used /dev/nvme0n1p8 | tail -1 | tr -d 'M'`
-    swap_size=`df -BM --output=size /dev/nvme0n1p8 | tail -1 | tr -d 'M'`
+    swap_used=`df -BM --output=used /dev/nvme0n1p5 | tail -1 | tr -d 'M'`
+    swap_size=`df -BM --output=size /dev/nvme0n1p5 | tail -1 | tr -d 'M'`
     bytes_size=1024
 
     size=`echo "scale=1 ; $swap_size / $bytes_size" | bc`
