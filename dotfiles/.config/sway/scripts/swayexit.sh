@@ -1,7 +1,7 @@
 #!/bin/sh
 
 lock() {
-    swaylock -e -f -c 000000 -i ~/Pictures/WP/2K/3.jpg -t
+    swaylock -e -f -k -l -i ~/Pictures/WP/2K/3.jpg -t
 }
 
 case "$1" in

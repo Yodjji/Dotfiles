@@ -1,0 +1,36 @@
+{
+    "label" : "lock",
+    "action" : "swaylock -e -f -k -l -i eDP-1:'~/Pictures/WP/2K/3.jpg' -i HDMI-A-1:'~/Pictures/WP/FullHD/3.jpg' -t",
+    "text" : "Lock",
+    "keybind" : "l"
+}
+{
+    "label" : "hibernate",
+    "action" : "swaylock -e -f -k -l -i eDP-1:'~/Pictures/WP/2K/3.jpg' -t && systemctl hibernate",
+    "text" : "Hibernate",
+    "keybind" : "h"
+}
+{
+    "label" : "logout",
+    "action" : "hyprctl dispatch exit 0",
+    "text" : "Logout",
+    "keybind" : "e"
+}
+{
+    "label" : "shutdown",
+    "action" : "shutdown -P now",
+    "text" : "Shutdown",
+    "keybind" : "s"
+}
+{
+    "label" : "suspend",
+    "action" : "swaylock -e -f -k -l -i eDP-1:'~/Pictures/WP/2K/3.jpg' -t && systemctl suspend",
+    "text" : "Suspend",
+    "keybind" : "u"
+}
+{
+    "label" : "reboot",
+    "action" : "systemctl reboot",
+    "text" : "Reboot",
+    "keybind" : "r"
+}

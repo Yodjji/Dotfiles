@@ -10,15 +10,18 @@
 set $mod Mod1
 
 # Autostart
+exec --no-startup-id /usr/lib/polkit-kde-authentication-agent-1 &
+# exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 exec nm-applet --indicator
-exec blueman-tray
+exec blueman-applet
 exec udiskie -ant &
 exec autotiling
-# exec mako
 exec swaync
-exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-# exec --no-startup-id /usr/lib/xdg-desktop-portal -r
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec swayidle -w \
+	timeout 1800 'swaylock -e -f -k -l -i ~/Pictures/WP/2K/3.jpg -t' \
+	timeout 1805 'swaymsg "output * power off"' \
+	resume 'swaymsg "output * power on"'
+
 
 # Home row direction keys, like vim
 set $left h
@@ -37,15 +40,18 @@ set $menu dmenu_path | wofi --show drun -W 1000 -H 500 -I -G -l 0 -O alphabetica
 
 # Simple background
 output eDP-1 mode 2160x1440
-output eDP-1 bg ~/Pictures/WP/2K/20.jpg fill
+output eDP-1 bg ~/Pictures/WP/2K/24.jpg fill
 output HDMI-A-1 mode 1920x1080@74.973Hz
-output HDMI-A-1 bg ~/Pictures/WP/FullHD/3.jpg fill
+output HDMI-A-1 bg ~/Pictures/WP/FullHD/6.jpg fill
 # output * bg #000000 solid_color
 bindswitch lid:on exec ~/.config/sway/scripts/lockOff.sh & exec systemctl suspend
 bindswitch lid:off exec swaymsg output eDP-1 enable
 
 # Gif background
-# exec_always oguri
+# exec_always oguri -c ~/.config/oguri/config
+
+# Video wallpapers
+# exec_always mpvpaper -vs -o "no-audio loop" '*' ~/Downloads/4.mp4
 
 # Example configuration:
 #
@@ -241,10 +247,15 @@ bindsym $mod+r mode "resize"
 
 for_window [app_id="org.gnome.Calculator"] floating enable
 for_window [app_id="galculator"] floating enable
-for_window [app_id="conky-toggle"] floating enable
+for_window [app_id="org.kde.polkit-kde-authentication-agent-1"] floating enable
+for_window [app_id="nm-openconnect-auth-dialog"] floating enable
 
 bar {
     swaybar_command waybar
+    position top
+    hidden_state hide
+    mode hide
+    modifier Mod4
 }
 
 # Programms
@@ -253,7 +264,7 @@ bindsym --to-code $mod+shift+w exec chromium
 bindsym --to-code $mod+control+c exec code
 bindsym --to-code $mod+control+d exec discord
 bindsym --to-code $mod+t exec telegram-desktop
-bindsym --to-code $mod+shift+Return exec dolphin
+bindsym --to-code $mod+shift+Return exec thunar
 bindsym --to-code $mod+control+v exec protonvpn
 bindsym --to-code $mod+control+k exec keepassxc
 bindsym --to-code $mod+control+l exec Cisco
@@ -263,7 +274,7 @@ bindsym --to-code $mod+shift+k exec kitty -e calcure
 bindsym --to-code $mod+control+Return exec kitty ranger
 bindsym --to-code $mod+control+h exec kitty -e htop
 bindsym --to-code $mod+control+b exec kitty -e bashtop
-bindsym --to-code $mod+shift+t exec ~/.config/scripts/TB/TB.sh
+bindsym --to-code $mod+shift+t tor-browser
 bindsym --to-code $mod+shift+control+v exec kitty -e ~/.config/scripts/vpn/vpn_repair.sh
 bindsym --to-code $mod+shift+b exec kitty -e ~/.config/scripts/other_scripts/blut.sh
 bindsym --to-code $mod+shift+z exec kitty -e ~/.config/scripts/vpn/vpn_s7.sh
@@ -273,15 +284,15 @@ bindsym --to-code $mod+b exec kitty -e bluetuith
 bindsym --to-code $mod+v+o exec ~/.config/scripts/vpn/vpn_on.sh
 bindsym --to-code $mod+v+d exec ~/.config/scripts/vpn/vpn_off.sh
 
+exec wl-paste -t text --watch clipman store --no-persist
 set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
 exec rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
 
 # Audio
-# bindsym --to-code XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master '5%+' | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
-# bindsym --to-code XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master '5%-' | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1| awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl get-sink-volume @DEFAULT_SINK@ | head -n 1 | awk '{print substr($5, 1, length($5)-1)}' > $WOBSOCK
-bindsym --to-code XF86AudioMute exec --no-startup-id amixer -D pulse set Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > $WOBSOCK
+# bindsym XF86AudioMute exec --no-startup-id amixer -D pulse set Master toggle | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > $WOBSOCK
 
 # Brightness
 bindsym --to-code XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
@@ -295,6 +306,7 @@ input * {
     xkb_layout "us,ru"
     xkb_options "grp:caps_toggle"
 }
+
 input <1:1:AT_Translated_Set_2_keyboard> xkb_model "pc101"
 
 # Mouse
@@ -311,19 +323,18 @@ gaps outer 6
 smart_gaps on
 
 # Borders
-default_border pixel 3
-for_window [tiling] border pixel 5
+default_border pixel 1
+# for_window [tiling] border pixel 6
 smart_borders on
 
 # Screenshots
-bindsym --to-code Print exec grim ~/Pictures/Screenshots/screen-"$(date +%s)".png
-bindsym --to-code $mod+Print exec grim -g "$(slurp)" ~/Pictures/Screenshots/screen-"$(date +%s)".png
+bindsym --to-code Print exec grim ~/Pictures/Screenshots/screen-"$(date +%s)".png | swappy -f -
+bindsym --to-code $mod+Print exec grim -g "$(slurp)" - | swappy -f - "~/Pictures/Screenshots/screen-'$(date +%s)'.png"
 
-# Cursour
-seat seat0 xcursor_theme "Dracula-cursors" 8
 set $gnome-schema org.gnome.desktop.interface
 exec_always {
-    gsettings set $gnome-schema cursor-theme 'Dracula-cursors'
+    gsettings set $gnome-schema gtk-theme 'Breeze-Dark'
+    gsettings set $gnome-schema cursor-theme 'breeze_cursors'
 }
 
 # Exit

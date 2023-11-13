@@ -1,81 +1,66 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "id": 1,
-    "height": 15, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width  
+    "ipc": "true",
+    "id": "bar-0",
+    "height": 30, // Waybar height (to be removed for auto height)
     "spacing": 0, // Gaps between modules (4px)
-    "hidden_state": "hide 1",
+
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["custom/pacman", "custom/separate_line", "custom/disk_status", "custom/separate_line", "cpu", "temperature", "custom/separate_line", "custom/memory"],
-    "modules-right": ["backlight", "custom/separate_line", "pulseaudio", "custom/separate_line", "network#vpn", "custom/separate_line", "sway/language", "keyboard-state", "custom/separate_line", "custom/battery", "custom/separate_line", "clock", "custom/separate_line", "tray"],
-    // Modules configuration
-    // "sway/workspaces": {
-    //     "disable-scroll": false,
-    //     "all-outputs": true,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
-    "custom/disk_status": {
-        "format": "Disk",
-        "on-click": "~/.config/scripts/hardware/hardware.sh",
-    },
-    "custom/separate_line": {
-        "format": "|"
-    },
-    "keyboard-state": {
-        "numlock": false,
-        "capslock": true,
-        "format": "{name}",
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["custom/pacman"],
+    "modules-right": ["hyprland/language", "backlight", "wireplumber", "upower", "clock", "tray"],
+
+    "hyprland/workspaces": {
+        "all-outputs": false,
+        "active-only": "false",
+        "format": "{icon}",
         "format-icons": {
-            "locked": "",
-            "unlocked": ""
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7",
+          "8": "8",
+          "9": "9",
+          "10": "10",
+          "urgent": "",
+          "default": "",
+          "persistent": "persistent",
+          "empty": "empty"
         }
     },
+
+    "hyprland/language": {
+        "format": "  {}",
+        "format-en": "us",
+        "format-ru": "ru",
+    },
+
+    "wlr/workspaces": {
+         "format": "{name}",
+         "on-click": "activate",
+         "on-scroll-up": "hyprctl dispatch workspace e+1",
+         "on-scroll-down": "hyprctl dispatch workspace e-1"
+    },
+
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
         // "format": "{}"
     },
+
     "sway/window": {
         "format": "{}",
         "max-length": 50
     },
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 2,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+
+    "sway/language": {
+        "format": "{}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     },
+
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
@@ -83,105 +68,49 @@
             "deactivated": ""
         }
     },
+
+    "wireplumber": {
+        "format": "{icon}  {volume}",
+        "on-click": "pavucontrol",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾 "]
+        },
+        "format-muted": "󰝟 ",
+    },
+
+    "upower": {
+      "icon-size": 20,
+    },
+
     "tray": {
         "icon-size": 16,
         "spacing": 8,
         "show-passive-items": true
     },
+
     "clock": {
         "timezone": "Europe/Moscow",
         "interval": 1,
-        "format": " {:%H:%M:%S}",
-        "tooltip-format": "<big>{:%d-%m-%Y}</big>\n<tt><small>{calendar}</small></tt>",
-        // "format-alt": "{:%Y-%m-%d}",
+        "format": "{: 󰥔  %H:%M:%S    %d-%m-%Y}",
         "on-click": "kitty -e calcure"
     },
-    "cpu": {
-        // "format": "CPU: {usage}% ",
-        "format": "CPU: {usage}%",
-        "interval": 1,
-        "tooltip": false
-    },
-    "memory": {
-        // "format": "Mem: {}%  "
-        "interval": 1,
-        "format": "Mem: {used:0.1f}G/{total:0.1f}G",
-    },
-    "custom/memory": {
-        // "format": "Mem: {}%  "
-        "interval": 1,
-        /* "format": "Mem: {used:0.1f}G/{total:0.1f}G", */
-        "exec": "~/.config/scripts/other_scripts/cust_mem.sh"
-    },
+
     "custom/pacman": {
-        "format": "{}  ",
-        "interval": 3600, // every hour
-        "exec": "checkupdates | wc -l", // # of updates
+        "format": "󱑤  {}",
+        "interval": 60, // every minute
+        "exec": "checkupdates-with-aur | wc -l", // # of updates
         "exec-if": "exit 0", // always run; consider advanced run conditions
         "on-click": "kitty -e paru -Syyu; pkill -SIGRTMIN+8 waybar", // update system
         "signal": 8
     },
-    "custom/speedtest": {
-        "format": "{}",
-        "interval": 1,
-        "exec": "~/.config/polybar/scripts/speedtest-polybar-module/speedtest_api.py"
-    },
-    "temperature": {
-        "thermal-zone": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon4/temp2_input",
-        "critical-threshold": 80,
-        "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": [""],
-        "interval": 1,
-    },
-    "network#vpn": {
-        "interface": "proton0",
-        /* "format": "嬨  {essid} ({signalStrength}%)", */
-        "format": "VPN: on",
-        /* "format-disconnected": "⚠  Disconnected", */
-        "format-disconnected": "VPN: off",
-        /* "on-click": "protonvpn-cli c -f --protocol udp", */
-        /* "on-click-right": "protonvpn-cli d", */
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",          
-    },
+
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": [""]
+        "format": "{icon} {percent}% ",
+        "format-icons": [" "]
         /* "format-icons": ["", ""] */
     },
-    "battery": {
-        "states": {
-            "good": 95,
-            "warning": 20,
-            "critical": 10
-        },
-        "exec": "~/.config/scripts/hardware/bat_procent.sh",
-        "format": "{}% {icon}",
-        "format-charging": "{}% ",
-        "format-plugged": "{}% ",
-        "format-alt": "{time} {icon}",
-         //"format-good": "", // An empty format will hide the module
-         //"format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "custom/battery": {
-        "states": {
-            "good": 95,
-            "warning": 20,
-            "critical": 10
-        },
-        "format": "{}",
-        "exec": "~/.config/scripts/hardware/bat_procent.sh",
-        "interval": 1,
-        "format-charging": "{} ",
-        "format-plugged": "{} ",
-        "format-alt": "{time} {icon}",
-        /* // "format-good": "", // An empty format will hide the module */
-        /* // "format-full": "", */
-        /* "format-icons": ["", "", "", "", ""] */
-    },
+
     "network": {
         "interface": "wlp1s0", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
@@ -192,6 +121,7 @@
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
+
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "format": "{volume} {icon} {format_source}",
@@ -210,18 +140,6 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
-    },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     }
 }
 
